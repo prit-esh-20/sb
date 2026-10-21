@@ -1,0 +1,120 @@
+
+| Memory Address | Assembly Code       | Comments                                |
+| -------------- | ------------------- | --------------------------------------- |
+| 0000H          | MOV TMOD, #20H      | Timer 1, Mode 2 (8-bit auto-reload)     |
+| 0003H          | MOV TH1, #0FDH      | Load count for 9600 baud                |
+| 0006H          | MOV SCON, #50H      | Serial mode (8-bit UART), REN = 1       |
+| 0009H          | SETB TR1            | Start Timer 1                           |
+| 000BH          | REPEAT: MOV A, #'Y' | Load ASCII of 'Y' (59H) into A          |
+| 000DH          | ACALL AGAIN         | Call the transmit subroutine            |
+| 000FH          | SJMP REPEAT         | Send the character again                |
+| 0011H          | AGAIN: MOV SBUF, A  | Write data to SBUF, transmission starts |
+| 0013H          | HERE: JNB TI, HERE  | Wait until TI = 1                       |
+| 0016H          | CLR TI              | Clear the transmit flag                 |
+| 0018H          | RET                 | Return to the main program              |
+| 0019H          | END                 | End of program                          |
+
+
+Algorithm:
+
+1. Start the program.
+2. Initialize Timer 1 in Mode 2 using TMOD register.
+3. Load TH1 with FDH to set the baud rate to 9600.
+4. Configure the serial port using SCON register (Mode 1).
+5. Start Timer 1 by setting TR1 = 1.
+6. Load ASCII character 'Y' into accumulator A.
+7. Call the transmission subroutine.
+8. Load the character into SBUF to start transmission.
+9. Wait until TI = 1, indicating transmission is complete.
+10. Clear TI flag.
+11. Return to the main program and repeat transmission.
+12. Stop the program.
+
+
+                  +----------------+
+                  |     START      |
+                  +----------------+
+                          |
+                          v
+              +------------------------+
+              | Initialize TMOD = 20H  |
+              | Timer 1, Mode 2        |
+              +------------------------+
+                          |
+                          v
+              +------------------------+
+              | Load TH1 = FDH         |
+              | Set baud rate          |
+              +------------------------+
+                          |
+                          v
+              +------------------------+
+              | Initialize SCON = 50H  |
+              | Serial Mode 1          |
+              +------------------------+
+                          |
+                          v
+              +------------------------+
+              | Set TR1 = 1            |
+              | Start Timer 1          |
+              +------------------------+
+                          |
+                          v
+              +------------------------+
+              | Load ASCII 'Y' into A  |
+              +------------------------+
+                          |
+                          v
+              +------------------------+
+              | Load A into SBUF       |
+              +------------------------+
+                          |
+                          v
+                    +-----------+
+                    |  TI = 1 ? |
+                    +-----------+
+                     /         \
+                   No           Yes
+                   |              |
+                   v              v
+             +------------+  +----------------+
+             | Wait for   |  | Clear TI flag  |
+             | TI = 1     |  +----------------+
+             +------------+          |
+                   |                 v
+                   +-----> TI check  +----------------+
+                                     | Repeat sending |
+                                     | character 'Y'  |
+                                     +----------------+
+                                             |
+                                             v
+                                     +----------------+
+                                     |     STOP       |
+                                     +----------------+
+
+
+CALCULATIONS
+
+TMOD:
+| GATE | C/T | M1 | M0 | GATE | C/T | M1 | M0 |
+| Timer 1 - Mode 2     |     Timer 2          |
+
+SCON:
+| SM0 | SM1 | SM2 | REN | TB8 | RB8 | TI | RI |
+
+Timer Modes:
+00 -> Mode 0 -> 13-bit timer
+01 -> Mode 1 -> 16-bit timer
+10 -> Mode 2 -> 8-bit auto-reload
+11 -> Mode 3 -> Split timer
+
+Register:
+UART -> Fosc / 12
+UART -> Variable
+UART -> Fosc / 64 or 32 (depending on mode)
+
+Baud Rate     Hex Value
+4800          FA
+9600          FD
+2400          F4
+1200          E8                               
