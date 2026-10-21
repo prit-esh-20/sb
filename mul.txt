@@ -1,4 +1,4 @@
-MUL / DIV Program:
+MUL Program:
 
 Memory 	Instruction	          Comment
 C000	MOV SI, 2000	     Initialize source address
