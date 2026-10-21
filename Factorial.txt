@@ -1,0 +1,74 @@
+Factorial PROGRAM
+
+| Memory Address | Assembly Code     | Comments                       |
+| -------------- | ----------------- | ------------------------------ |
+| C000           | `MOV SI, 2000H`   | Initialize source address      |
+| C003           | `MOV DI, 4000H`   | Initialize destination address |
+| C006           | `MOV CX, [SI]`    | Load number                    |
+| C008           | `MOV AX, 0001H`   | Initialize factorial result    |
+| C00B           | `MOV DX, 0000H`   | Clear higher word              |
+| C00E           | `MUL CX`          | Multiply result by CX          |
+| C010           | `LOOP C00EH`      | Repeat until CX becomes zero   |
+| C012           | `MOV [DI], AX`    | Store lower word               |
+| C014           | `MOV [DI+02], DX` | Store higher word              |
+| C017           | `INT 3`           | Stop program                   |
+
+
+
+Algorithm:
+
+1. Initialize the SI register with the source address.
+2. Initialize the DI register with the destination address.
+3. Load the number into the CX register.
+4. Initialize the AX register to 0001H.
+5. Initialize the DX register to 0000H.
+6. Multiply the result by CX.
+7. Repeat the multiplication until CX becomes zero.
+8. Store the lower word of the result at the destination address.
+9. Store the higher word of the result at the next word address.
+10. Terminate the program using INT 3.
+
+
+
+              +-----------+
+              |   START   |
+              +-----------+
+                    |
+                    v
+          +-------------------+
+          | Initialize SI, DI |
+          +-------------------+
+                    |
+                    v
+          /---------------------/
+         / Load number into CX /
+        /---------------------/
+                    |
+                    v
+          +-------------------+
+          | AX = 0001H        |
+          | DX = 0000H        |
+          +-------------------+
+                    |
+                    v
+              +-----------+
+              |  MUL CX   |
+              +-----------+
+                    |
+                    v
+               +---------+
+               |  CX = 0?|
+               +---------+
+                 /     \
+              Yes       No
+               |         |
+               v         v
+        +-----------+  +-------------+
+        | Store AX  |  | Loop execute|
+        | and DX    |  +-------------+
+        +-----------+        |
+               |             v
+               v          +---------+
+          +-----------+   |  MUL CX |
+          |   STOP    |   +---------+
+          +-----------+
