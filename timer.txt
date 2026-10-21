@@ -1,0 +1,123 @@
+
+| Memory Address | Assembly Code         | Comments                                   |
+| -------------- | --------------------- | ------------------------------------------ |
+| 0000H          | ORG 00H               | Set program starting address               |
+| 0000H          | AGAIN: MOV TMOD, #10H | Configure Timer 1 in Mode 1 (16-bit timer) |
+| 0003H          | MOV TH1, #0DBH        | Load higher byte of timer count            |
+| 0006H          | MOV TL1, #0FFH        | Load lower byte of timer count             |
+| 0009H          | SETB TR1              | Start Timer 1                              |
+| 000BH          | BACK: JNB TF1, BACK   | Wait until Timer 1 overflow flag is set    |
+| 000EH          | CLR TR1               | Stop Timer 1                               |
+| 0010H          | CPL P1.3              | Complement (toggle) pin P1.3               |
+| 0012H          | CLR TF1               | Clear Timer 1 overflow flag                |
+| 0014H          | SJMP AGAIN            | Repeat the process continuously            |
+| 0016H          | END                   | End of source program                      |
+
+ALGORITHM:
+1. Initialize Timer 1 in Mode 1 using the TMOD register.
+2. Load TH1 with DBH and TL1 with FFH to set the timer count.
+3. Start Timer 1 by setting the TR1 bit.
+4. Check the TF1 flag and wait until it becomes 1.
+5. Stop Timer 1 by clearing the TR1 bit.
+6. Complement pin P1.3 to toggle its output state.
+7. Clear the TF1 overflow flag.
+8. Repeat the process continuously by jumping to AGAIN.
+
+          +-----------+
+          |   START   |
+          +-----------+
+                |
+                v
+       +-------------------+
+       | Initialize Timer 1|
+       | TMOD = 10H        |
+       +-------------------+
+                |
+                v
+        /------------------/
+       / Load TH1 = DBH    /
+      /  Load TL1 = FFH   /
+     /------------------/
+                |
+                v
+       +-------------------+
+       | Start Timer 1     |
+       | Set TR1 = 1       |
+       +-------------------+
+                |
+                v
+          /-----------\
+         / Is TF1 = 1? \
+         \             /
+          \-----------/
+            |       |
+          No|       |Yes
+            |       v
+            |  +----------------+
+            |  | Stop Timer 1   |
+            |  | Clear TR1      |
+            |  +----------------+
+            |          |
+            |          v
+            |  +----------------+
+            |  | Toggle P1.3    |
+            |  | CPL P1.3       |
+            |  +----------------+
+            |          |
+            |          v
+            |  +----------------+
+            |  | Clear TF1      |
+            |  +----------------+
+            |          |
+            |          v
+            |    +-----------+
+            +--->| AGAIN     |
+                 +-----------+
+
+
+Delay Calculation:
+
+10 ms = (Max count - Count) × Time for 1 machine cycle
+
+       = (FFFFH - Count) × 11.0592 / 12
+
+10 ms = (65536 - Count) × 11.0592 / 12
+
+∴ Count = DBFFH
+
+TH1 = 0DBH, TL1 = 0FFH
+
+
+
+1. Open Keil Software
+2. Go to Project
+3.In Project go to New Vision Project
+4.Give any file name and save it
+•	.uvproj and save (Tim1.uvproj)
+5.After saving, Keil asks for device
+1.	Expand Atmel
+2.	Select AT89C51
+3.	Click OK
+4.It asks copy STARTUP.A51 to project & add file to project
+5. Click Yes
+6.File STARTUP.A51 already exists, overwrite?
+7. Yes
+8. Go to File
+9. Click New
+10. Type code
+11. Save file as t1.asm
+12.Go to Project Window
+13. Right click on Source Group 1
+14.  Select Add Existing Files to Group 'Source 1'
+15. Add file to Group Source 1 & select your target & click Open
+16.That project appears on project window under STARTUP.A51 t2.asm 
+18. Click Project → Build Target 
+19. Then go to Debug Start Debug (2,3 windows appear)
+20. Go to Peripheral Choose which timer you are using 
+21. Again go to Peripheral Select which port you are choosing 
+22. Go to View Select Logic Analyzer 
+23. Enlarge Logic Analyzer
+24. Go to Setup In Setup Logic Analyzer window click ... Signals window
+Again go to Setup window Click Display Type Unit as Bit 
+25. Then press RUN
+26. Set AUTO and zoom in out

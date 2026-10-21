@@ -1,0 +1,130 @@
+Assending PROGRAM
+
+Memory     Assembly Code       Comments
+
+C000       MOV CL, 09H         Initialize outer counter
+C002       MOV SI, 2000H       Initialize array address
+C005       MOV CH, CL          Initialize inner counter
+C007       MOV AL, [SI]        Load current element
+C009       INC SI              Move to next element
+C00A       MOV BL, [SI]        Load next element
+C00C       CMP AL, BL          Compare AL and BL
+C00E       JC/JNC C018         Skip exchange if AL <= BL / Al >= BL
+C010       XCHG AL, BL         Exchange elements
+C012       MOV [SI], BL        Store smaller element
+C014       DEC SI              Return to previous location
+C015       MOV [SI], AL        Store larger element
+C017       INC SI              Move to next element
+C018       DEC CH              Decrement inner counter
+C01A       JNZ C007            Repeat inner loop
+C01C       DEC CL              Decrement outer counter
+C01E       JNZ C002            Repeat outer loop
+C020       INT 3               Stop execution
+
+------------------------------------------------------------------
+
+ORG 100H
+MOV CL, 09H
+L1:
+MOV SI, 2000H
+MOV CH, CL
+L2:
+MOV AL, [SI]
+INC SI
+MOV BL, [SI]
+CMP AL, BL
+JC L3
+XCHG AL, BL
+MOV [SI], BL
+DEC SI
+MOV [SI], AL
+INC SI
+L3:
+DEC CH
+JNZ L2
+DEC CL
+JNZ L1
+HLT
+
+Algorithm:
+
+1. Initialize SI to input the source string.
+2. Use SI to store numbers in ascending or descending order.
+3. Load CL and CH as counters.
+4. Clear Direction Flag.
+5. Compare the first two numbers.
+6. Exchange the numbers according to ascending or descending order.
+7. Decrement the inner loop counter and repeat until it becomes zero.
+8. Decrement the outer loop counter and repeat the process.
+9. Terminate the program.
+
+
+
+                           +-----------+
+             |   START   |
+             +-----------+
+                   |
+                   v
+       +------------------------+
+       | Initialize outer count |
+       |       CL = 09H         |
+       +------------------------+
+                   |
+                   v
+       +------------------------+
+       | SI = 2000H             |
+       | Initialize inner count |
+       +------------------------+
+                   |
+                   v
+          /------------------/
+         / Load two numbers /
+        /------------------/
+                   |
+                   v
+            +-------------+
+            | CMP AL, BL  |
+            +-------------+
+                   |
+                   v
+             /-----------\
+            / Exchange?   \
+            \-------------/
+              /         \
+            Yes          No
+             |            |
+             v            |
+       +-------------+    |
+       | XCHG AL, BL |    |
+       +-------------+    |
+             |            |
+             +------┬-----+
+                    |
+                    v
+       +------------------------+
+       | Decrement inner count  |
+       +------------------------+
+                    |
+                    v
+             /-----------\
+            / CH = 0 ?    \
+            \-------------/
+              /         \
+             No          Yes
+              |            |
+              v            v
+       Load next numbers  +------------------------+
+              ^           | Decrement outer count  |
+              |           +------------------------+
+              |                      |
+              |                      v
+              |               /-----------\
+              |              / CL = 0 ?    \
+              |              \-------------/
+              |                /        \
+              +---------------No        Yes
+                               |          |
+                               v          v
+                         Repeat loop   +--------+
+                                       |  STOP  |
+                                       +--------+
