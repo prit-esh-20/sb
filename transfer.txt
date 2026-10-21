@@ -1,0 +1,50 @@
+Transfer Block:
+
+Memory 	Instructions	Comments
+C000	MOV SI, 2000H	Initialize source address
+C003	MOV DI, 4000H	Initialize destination address
+C006	MOV CX, 05H	    Load block count
+C009	REP MOVSB	    Transfer 5 bytes
+C00B	INT 3	        Stop execution
+
+
+Algorithm:
+
+1. Initialize SI to point to the Source String.
+2. Initialize DI to point to the Destination String.
+3. Load CX register with the count, i.e., number of data bytes to be transferred.
+4. Clear the Direction Flag.
+5. Move the contents of the source index to the destination index using string instructions.
+6. Terminate the program.
+
+
+          +-----------+
+          |   START   |
+          +-----------+
+                |
+                v
+      +---------------------+
+      | Initialize SI, DI   |
+      +---------------------+
+                |
+                v
+      +---------------------+
+      | Set CL = 05H        |
+      | Set byte count      |
+      +---------------------+
+                |
+                v
+      +---------------------+
+      | REP MOVSB           |
+      | Transfer data block |
+      +---------------------+
+                |
+                v
+      *-----------------------*
+     /  Destination updated   /                     
+    *------------------------*
+                |
+                v
+          +-----------+
+          |   STOP    |
+          +-----------+
