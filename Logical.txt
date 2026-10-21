@@ -1,0 +1,63 @@
+
+
+| Memory Address | Assembly Code   | Comments                       |
+| -------------- | --------------- | ------------------------------ |
+| C000           | MOV SI, 2000H   | Initialize source address      |
+| C003           | MOV DI, 4000H   | Initialize destination address |
+| C006           | MOV AX, [SI]    | Load first number              |
+| C008           | MOV BX, [SI+02] | Load second number             |
+| C00B           | AND AX, BX      | Perform AND operation          |
+| C00D           | MOV [DI], AX    | Store AND result               |
+| C00F           | NOT AX          | Complement AX                  |
+| C011           | MOV [DI+02], AX | Store NOT result               |
+| C014           | MOV AX, [SI]    | Reload first number            |
+| C016           | OR AX, BX       | Perform OR operation           |
+| C018           | MOV [DI+06], AX | Store OR result                |
+| C01B           | MOV AX, [SI]    | Reload first number            |
+| C01D           | XOR AX, BX      | Perform XOR operation          |
+| C01F           | MOV [DI+08], AX | Store XOR result               |
+| C022           | NOT AX          | Complement AX                  |
+| C024           | MOV [DI+0A], AX | Store NOT result               |
+| C027           | INT 3           | Stop execution                 |
+
+
+ALGORITHM:
+1. Initialize SI to input the Source String.
+2. Initialize DI to store the Destination String.
+3. Load AX and BX with first and second number.
+4. Perform logical operations and transfer the result in memory.
+5. Terminate the program.
+
+
+          +-----------+
+          |   START   |
+          +-----------+
+                |
+                v
+       +------------------+
+       | Initialize SI, DI|
+       +------------------+
+                |
+                v
+        /---------------------/
+       / Load first and      /
+      / second numbers into /
+     /     AX and BX       /
+    /---------------------/
+                |
+                v
+       +------------------------+
+       | Perform AND, NOT, OR,  |
+       | and XOR operations     |
+       +------------------------+
+                |
+                v
+        /--------------------/
+       / Store the results  /
+      /      in memory     /
+     /--------------------/
+                |
+                v
+          +-----------+
+          |   STOP    |
+          +-----------+
