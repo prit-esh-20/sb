@@ -1,0 +1,80 @@
+BCD:
+
+Memory            Instructions       Comments
+
+C000             MOV SI, 2000H       Initialize source address
+C003             MOV AL, [SI]        Load BCD data
+C005             MOV AH, AL          Copy BCD data
+C007             AND AH, 0F          Mask lower digit
+C009             ADD AH, 30          Convert digit to ASCII
+C00B             MOV [SI], AH        Store ASCII digit
+C00E             AND AL, 0F0         Mask upper digit
+C010             MOV CL, 04          Set shift count
+C012             SHR AL, CL          Shift upper digit
+C014             ADD AL, 30          Convert digit to ASCII
+C016             MOV [SI+01], AL     Store ASCII digit
+C019             INT 3               Stop execution
+
+
+Algorithm: 
+
+1. Start the program.
+2. Load the BCD number into a register.
+3. Separate the BCD digit(s) into individual decimal digits.
+4. Add 30H to each BCD digit to convert it into its corresponding ASCII code.
+5. Store the resulting ASCII value.
+6. Repeat the conversion for all BCD digits.
+7. Stop the program.
+
+
+             +-----------+
+             |   START   |
+             +-----------+
+                   |
+                   v
+           +------------------+
+          / Initialize SI    /
+         +------------------+
+                   |
+                   v
+          +------------------+
+          | Load BCD data    |
+          | into AL          |
+          +------------------+
+                   |
+                   v
+          +------------------+
+          | Mask digit:      |
+          | AND AH, 0FH      |
+          +------------------+
+                   |
+                   v
+          +------------------+
+          | ADD AH, 30H      |
+          +------------------+
+                   |
+                   v
+           +-----------------+
+          / Store ASCII     /
+         +-----------------+
+                   |
+                   v
+          +------------------+
+          | Shift upper BCD  |
+          | digit            |
+          +------------------+
+                   |
+                   v
+          +------------------+
+          | ADD AL, 30H      |
+          +------------------+
+                   |
+                   v
+          +------------------+
+          | Store ASCII      |
+          +------------------+
+                   |
+                   v
+             +-----------+
+             |   STOP    |
+             +-----------+
