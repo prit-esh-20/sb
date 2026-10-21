@@ -78,15 +78,12 @@ ALGORITHM:
 Delay Calculation:
 
 10 ms = (Max count - Count) × Time for 1 machine cycle
-
        = (FFFFH - Count) × 11.0592 / 12
 
 10 ms = (65536 - Count) × 11.0592 / 12
 
 ∴ Count = DBFFH
-
 TH1 = 0DBH, TL1 = 0FFH
-
 
 
 1. Open Keil Software
