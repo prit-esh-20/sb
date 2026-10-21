@@ -1,0 +1,55 @@
+MUL / DIV Program:
+
+Memory 	Instruction	          Comment
+C000	MOV SI, 2000	     Initialize source address
+C003	MOV DI, 4000	     Initialize destination address
+C006	MOV AX, [SI]	     Load multiplicant
+C008	MOV BX, [SI+02]	     Load multiplier
+C00B	MUL AX, BX	     Multiply AX by BX
+C00D	MOV [DI], AX	     Store lower word
+C00F	MOV [DI + 02], DX    Store higher word
+C012	INT 3	             Stop program
+
+
+
+Algorithm
+
+1. initialize the program with the help of DS register   
+2. Clear AX register
+3. Initialise the SI register for getting input
+4. Initialize the DI register for storing the output
+5. Get the multiplicant in AX register
+6. Get the multiplier in BX register
+7. Multiply both inputs using MUL instruction      
+8. Store the output (Ax will contain lower word and DX will contain higher word of output)
+
+
+          +-----------+
+          |   START   |
+          +-----------+
+                |
+                v
+       +------------------+
+       | Initialize SI, DI|
+       +------------------+
+                |
+                v
+       +----------------------+
+      / Load numbers into     /
+     /  AX and BX            / 
+     +----------------------+
+                |
+                v
+        +--------------+
+        | MUL AX, BX   |
+        +--------------+
+                |
+                v
+        +---------------------------+
+       /  Store DX:AX in memory     /
+      +----------------------------+
+                |
+                v
+          +-----------+
+          |   STOP    |
+          +-----------+
