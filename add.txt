@@ -1,8 +1,8 @@
 ADD / SUB Program:
 
 Memory 	Instruction	          Comment
-C000	MOV SI, 2000	     Initialize source address
-C003	MOV DI, 4000	     Initialize destination address
+C000	MOV SI, 2000H	     Initialize source address
+C003	MOV DI, 4000H	     Initialize destination address
 C006	MOV AX, [SI]	     Load first number
 C008	MOV BX, [SI+02]	     Load second number
 C00B	ADD/SUB AX, BX	     Add two numbers

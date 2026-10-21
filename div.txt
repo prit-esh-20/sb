@@ -1,0 +1,54 @@
+DIV Program:
+
+Memory 	Instruction	          Comment
+C000	MOV SI, 2000H	     Initialize source address
+C003	MOV DI, 4000H	     Initialize destination address
+C006	MOV AX, [SI]	     Load divident
+C008	MOV CX, [SI+02]	     Load divisor
+C00B	DIV CX	             Divide AX: AX by CX
+C00D	MOV [DI], AX	     Store quotient
+C00F	INT 3	             Stop program
+
+
+
+Algorithm
+
+1. initialize the program with the help of DS register   
+2. Clear AX register
+3. Initialise the SI register for getting input
+4. Initialize the DI register for storing the output
+5. Get 32-bit register dividend in AX and DX
+6. Get the divisor in CX register
+7. Divide AX + DX by CX     
+8. Store the output (Ax will contain lower word and DX will contain higher word of output)
+
+
+          +-----------+
+          |   START   |
+          +-----------+
+                |
+                v
+       +------------------+
+       | Initialize SI, DI|
+       +------------------+
+                |
+                v
+       +----------------------+
+      / Load dividend and     /
+     /  divisor              / 
+     +----------------------+
+                |
+                v
+        +--------------+
+        | DIV CX       |
+        +--------------+
+                |
+                v
+        +-----------------------------------+
+       /  Store quotient and remainder     /
+      +-----------------------------------+
+                |
+                v
+          +-----------+
+          |   STOP    |
+          +-----------+
