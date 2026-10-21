@@ -1,0 +1,57 @@
+ADD / SUB Program:
+
+Memory 	Instruction	          Comment
+C000	MOV SI, 2000	     Initialize source address
+C003	MOV DI, 4000	     Initialize destination address
+C006	MOV AX, [SI]	     Load first number
+C008	MOV BX, [SI+02]	     Load second number
+C00B	ADD/SUB AX, BX	     Add two numbers
+C00D	MOV [DI], AX	     Store addition result
+C00F	MOV AX, [SI]	     Reload first number
+C011	ADC/SBB AX, BX	     Add with carry
+C013	MOV [DI+02], AX	     Store result
+C016	INT 3	             Stop program
+
+
+
+Algorithm
+
+1. initialize the program with the help of DS register   
+2. Clear AX register
+3. Initialise the SI register for getting input
+4. Initialize the DI register for storing the output
+5. Get the first number in AX register
+6. Get the second input in BX
+7. Add both inputs using ADD instruction and store the output      
+8. Add both inputs using ADC instruction and store the output
+
+
+          +-----------+
+          |   START   |
+          +-----------+
+                |
+                v
+       +------------------+
+       | Initialize SI, DI|
+       +------------------+
+                |
+                v
+       +----------------------+
+       / Load numbers into    /
+      /  AX and BX           / 
+     +----------------------+
+                |
+                v
+        +-----------------+
+        | ADD/SUB AX, BX  |
+        +-----------------+
+                |
+                v
+        +------------------+
+       /  Store Result    /
+      +------------------+
+                |
+                v
+          +-----------+
+          |   STOP    |
+          +-----------+
